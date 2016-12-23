@@ -85,7 +85,6 @@ class KijijiApi:
                 'ca.kijiji.xsrf.token': getToken(resp.text, 'ca.kijiji.xsrf.token'),
                 'targetUrl': 'L3QtbG9naW4uaHRtbD90YXJnZXRVcmw9TDNRdGJHOW5hVzR1YUhSdGJEOTBZWEpuWlhSVmNtdzlUREpuZEZwWFVuUmlNalV3WWpJMGRGbFlTbXhaVXpoNFRucEJkMDFxUVhsWWJVMTZZbFZLU1dGVmJHdGtiVTVzVlcxa1VWSkZPV0ZVUmtWNlUyMWpPVkJSTFMxZVRITTBVMk5wVW5wbVRHRlFRVUZwTDNKSGNtVk9kejA5XnpvMnFzNmc2NWZlOWF1T1BKMmRybEE9PQ--'
                 }
-        print(payload)
         resp = self.session.post(url, data = payload)
         if not self.isLoggedIn():
             raise SignInException(resp.text)
@@ -120,8 +119,12 @@ class KijijiApi:
         images = []
 
         imageUploadUrl = 'https://www.kijiji.ca/p-upload-image.html'
+        for image in imageFiles:
+            images.append(uploadOneImage(image))
+        """
         with Pool(5) as p:
             images = p.map(uploadOneImage, imageFiles)
+        """
         return [image for image in images if image is not None]
     
     #Data is a Dictionary that represents the data that will be posted to Kijijiserver

@@ -1,2 +1,8 @@
 .DS_Store
 db.sqlite3
+*.swp
+*.pyc
+
+postable_item_photos
+*/__pycache__/*
+poster/__pycache__/*

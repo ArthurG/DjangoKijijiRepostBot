@@ -7,6 +7,7 @@ from django.http import Http404
 from rest_framework.views import APIView
 from rest_framework import generics
 from rest_framework.response import Response
+from rest_framework.parsers import FileUploadParser, MultiPartParser, FormParser, JSONParser
 from rest_framework import status
 
 import poster.KijijiApi as K_Api
@@ -22,7 +23,6 @@ class PostableItemList(generics.ListCreateAPIView):
     """
     queryset = PostableItem.objects.all()
     serializer_class = PostableItemSerializer
-
 
 class PostableItemDetail(generics.RetrieveUpdateDestroyAPIView):
     """
@@ -65,7 +65,7 @@ def convertData(item):
     data['postAdForm.priceAmount']=str(item.priceAmount)
     attrs = item.attr.all()
     for attr in attrs:
-        print(attr)
+        print(attr.val)
         data['postAdForm.attributeMap[{}]'.format(attr.key)]=attr.val
     data['postAdForm.title']=item.title
     data['postAdForm.description']=item.description
@@ -77,15 +77,71 @@ def convertData(item):
 
     return data
 
+def getPhotos(item):
+    files = []
+    try: 
+        f = open(item.photo1.path,'rb').read()
+        files.append(f)
+    except ValueError:
+        pass
+    try: 
+        f = open(item.photo2.path,'rb').read()
+        files.append(f)
+    except ValueError:
+        pass
+    try: 
+        f = open(item.photo3.path,'rb').read()
+        files.append(f)
+    except ValueError:
+        pass
+    try: 
+        f = open(item.photo4.path,'rb').read()
+        files.append(f)
+    except ValueError:
+        pass
+    try: 
+        f = open(item.photo5.path,'rb').read()
+        files.append(f)
+    except ValueError:
+        pass
+    try: 
+        f = open(item.photo6.path,'rb').read()
+        files.append(f)
+    except ValueError:
+        pass
+    try: 
+        f = open(item.photo7.path,'rb').read()
+        files.append(f)
+    except ValueError:
+        pass
+    try: 
+        f = open(item.photo8.path,'rb').read()
+        files.append(f)
+    except ValueError:
+        pass
+    try: 
+        f = open(item.photo9.path,'rb').read()
+        files.append(f)
+    except ValueError:
+        pass
+    try: 
+        f = open(item.photo10.path,'rb').read()
+        files.append(f)
+    except ValueError:
+        pass
+    return files
+    
+
 def post(request, pk):
     item = PostableItem.objects.get(pk=pk)
     data=convertData(item)
+    
+    files = getPhotos(item)
     print(data)
     try:
         api = K_Api.KijijiApi()
-        print(item.username, item.password)
         api.login(item.username, item.password)
-        api.postAdUsingData(data, [])
+        api.postAdUsingData(data, files)
     except Exception as e:
         #print(e)
         return HttpResponse(e)
