@@ -35,6 +35,7 @@ class PostableItem(models.Model):
     locationId=models.CharField(max_length=20,default='1700212')
     username=models.CharField(max_length=40)
     password=models.CharField(max_length=40)
+    repostWaitInterval=models.IntegerField(default=86400) #Item will be reposted once a day, time given in seconds
 
 class PostableAttr(models.Model):
     related_item = models.ForeignKey(PostableItem, on_delete=models.CASCADE, related_name = 'attr') 

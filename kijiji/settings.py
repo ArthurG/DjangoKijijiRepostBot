@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'django_crontab',
     'poster.apps.PosterConfig',
 ]
 
@@ -99,6 +100,14 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
+CRONJOBS = [
+        ('*/1 * * * *', 'poster.cron.auto_post', [BASE_DIR])
+]
+
+#CRONTAB_DJANGO_PROJECT_NAME = 'kijiji'
+#CRONTAB_DJANGO_MANAGE_PATH = '/Volumes/HDD/Users/arthur/Desktop/django/save/manage.py'
+#CRONTAB_DJANGO_SETTINGS_MODULE = '/Volumes/HDD/Users/arthur/Desktop/django/save/kijiji/settings.py'
 
 
 # Internationalization

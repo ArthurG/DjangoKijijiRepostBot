@@ -10,7 +10,7 @@ class PostableItemSerializer(serializers.ModelSerializer):
     attr = PostableAttrSerializer(many=True)
     class Meta:
         model = PostableItem
-        fields = ('id', 'address', 'title', 'description', 'photo1','photo2','photo3','photo4','photo5', 'photo6','photo7','photo8', 'photo9','photo10', 'categoryId', 'adType', 'priceType', 'attr', 'priceAmount', 'locationId', 'username', 'password')
+        fields = ('id', 'address', 'title', 'description', 'photo1','photo2','photo3','photo4','photo5', 'photo6','photo7','photo8', 'photo9','photo10', 'categoryId', 'adType', 'priceType', 'attr', 'priceAmount', 'locationId', 'username', 'password', 'repostWaitInterval')
 
     ###Write custom create/update method because of nested attributes
     def create(self, validated_data):
@@ -22,13 +22,14 @@ class PostableItemSerializer(serializers.ModelSerializer):
 
 
     def update(self, item, validated_data):
-        all_attr_data = validated_data.pop('attr')
+        if ('attr' in validated_data):
+            all_attr_data = validated_data.pop('attr')
+            item.attr.all().delete()
+            for attr_data in all_attr_data:
+                PostableAttr.objects.create(related_item=item, **attr_data)
         #print(**validated_data)
         item.__dict__.update(**validated_data)
         item.save()
-        item.attr.all().delete()
-        for attr_data in all_attr_data:
-            PostableAttr.objects.create(related_item=item, **attr_data)
         return item
 
 

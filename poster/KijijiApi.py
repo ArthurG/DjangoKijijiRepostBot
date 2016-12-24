@@ -10,9 +10,12 @@ if sys.version_info < (3, 0):
 
 class KijijiApiException(Exception):
     def __init__(self, dump=None):
+
         if dump:
-            with open('/tmp/kijiji-api-dump', 'w') as dumpfile:
-                dumpfile.write(dump)
+            pass
+            #print(dump)
+            #with open('/tmp/kijiji-api-dump', 'w') as dumpfile:
+            #    dumpfile.write(dump)
     def __str(self):
         return 'View /tmp/kijiji-api-dump/ for last dumpfile'
 
